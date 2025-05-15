@@ -3,10 +3,11 @@ import { Box, Grid, Card, CardContent, CardMedia, Typography, CircularProgress, 
 import { useNavigate } from 'react-router-dom';
 import CartButton from '../stayledComponents/CartButton';
 
+//מציג את רשימת כל המוצרים הנמצאים בקטגוריה הנבחרת מדף CategoryProducts
 const ProductsList = ({ loading, data }) => {
   const navigate = useNavigate();
 
-  if (loading) {
+  if (loading) {//if it's loading, a circle is shown on screen
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
         <CircularProgress />
@@ -14,7 +15,7 @@ const ProductsList = ({ loading, data }) => {
     );
   }
 
-  if (!data || data.length === 0) {
+  if (!data || data.length === 0) {//if no data or data length is 0
     return (
       <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
         <Typography variant="h6" color="text.secondary">
@@ -43,7 +44,7 @@ const ProductsList = ({ loading, data }) => {
                     cursor: 'pointer'
                   }
                 }}
-                onClick={() => navigate(`/products/details/${product.id}`)}
+                onClick={() => navigate(`/products/details/${product.id}`)}//nav into ProductCard
               >
                 <CardMedia
                   component="img"

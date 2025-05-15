@@ -8,6 +8,7 @@ import Cart from'../features/pages/Cart'
 import NotFound from '../features/pages/NotFound'
 import CategoryProducts from '../features/products/CategoryProducts'
 import ProductDetails from '../features/products/ProductDetails'
+import ProductsLayout from '../features/products/ProductsLayout'
 const routers = ()=>{
 
     return(
@@ -18,7 +19,7 @@ const routers = ()=>{
     <Route path="about" element={<About/>}/>
     <Route path="contactUs" element ={<ContactUs/>}/>
      {/* ניתוב מקונן לדף המוצרים */}
-     <Route path="products">
+     <Route path="products" element={<ProductsLayout/>}>
   <Route index element={<Products />} />
   <Route path=":category" element={<CategoryProducts />} />
   <Route path="details/:productId" element={<ProductDetails />} />

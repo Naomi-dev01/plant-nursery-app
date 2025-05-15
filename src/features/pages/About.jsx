@@ -1,11 +1,12 @@
 import React from 'react';
-import { Box, Container, Typography, Grid, Paper, Avatar, Divider } from '@mui/material';
+import { Box, Container, Typography, Grid, Paper, Avatar} from '@mui/material';
 import LocalFloristIcon from '@mui/icons-material/LocalFlorist';
 import EmojiNatureIcon from '@mui/icons-material/EmojiNature';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
+import { aboutStyles } from '../../styles/aboutStyle';
 
 const About = () => {
   const features = [
@@ -30,17 +31,17 @@ const About = () => {
     {
       name: 'נועה כהן',
       role: 'מייסדת המשתלה',
-      image: '/images/team/noa.jpg'
+      image: '/images/ppl/תמונה1.jpg'
     },
     {
-      name: 'דוד לוי',
+      name: ' יחיאל לוי',
       role: 'מומחה גינון',
-      image: '/images/team/david.jpg'
+      image: '/images/ppl/תמונה2.jpg'
     },
     {
-      name: 'שרה אברהם',
-      role: 'מעצבת גינות',
-      image: '/images/team/sara.jpg'
+      name: 'נתן אברהם',
+      role: 'מעצב גינות',
+      image: '/images/ppl/תמונה3.jpg'
     }
   ];
 
@@ -48,36 +49,13 @@ const About = () => {
     <Box>
       {/* Hero Section */}
       <Box
-        sx={{
-          backgroundImage: 'url(/images/navBarIm/303.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '40vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }
-        }}
+        sx={aboutStyles.heroSection}
       >
         <Container maxWidth="md">
           <Typography
             variant="h2"
             component="h1"
-            sx={{
-              color: 'white',
-              textAlign: 'center',
-              position: 'relative',
-              zIndex: 1
-            }}
+            sx={aboutStyles.heroTitle}
           >
             אודות משתלת נועה
           </Typography>
@@ -91,7 +69,7 @@ const About = () => {
           <Typography variant="h4" component="h2" gutterBottom sx={{ color: '#2e7d32', textAlign: 'center', mb: 4 }}>
             הסיפור שלנו
           </Typography>
-          <Typography variant="body1" paragraph sx={{ fontSize: '1.1rem', textAlign: 'center' }}>
+          <Typography variant="body1" paragraph sx={aboutStyles.storyText}>
             משתלת נועה נוסדה בשנת 1990 על ידי נועה כהן, חובבת גינון נלהבת.
             מה שהתחיל כמשתלה קטנה בחצר האחורית של הבית, הפך למשתלה מובילה בארץ.
             במשך השנים, המשתלה גדלה והתפתחה, אך השמירה על איכות השירות והמקצועיות נשארה בעדיפות עליונה.
@@ -99,7 +77,7 @@ const About = () => {
         </Paper>
 
         {/* Features Section */}
-        <Typography variant="h4" component="h2" gutterBottom sx={{ color: '#2e7d32', textAlign: 'center', mb: 6 }}>
+        <Typography variant="h4" component="h2" gutterBottom sx={aboutStyles.sectionTitle}>
           למה אנחנו?
         </Typography>
         <Grid container spacing={4} sx={{ mb: 8 }}>
@@ -107,14 +85,7 @@ const About = () => {
             <Grid item xs={12} md={4} key={feature.title}>
               <Paper
                 elevation={2}
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center'
-                }}
+                sx={aboutStyles.featureCard}
               >
                 <Box sx={{ color: '#2e7d32', mb: 2 }}>
                   {feature.icon}
@@ -131,7 +102,7 @@ const About = () => {
         </Grid>
 
         {/* Team Section */}
-        <Typography variant="h4" component="h2" gutterBottom sx={{ color: '#2e7d32', textAlign: 'center', mb: 6 }}>
+        <Typography variant="h4" component="h2" gutterBottom sx={aboutStyles.sectionTitle}>
           הצוות שלנו
         </Typography>
         <Grid container spacing={4} sx={{ mb: 8 }}>
@@ -139,14 +110,7 @@ const About = () => {
             <Grid item xs={12} sm={6} md={4} key={member.name}>
               <Paper
                 elevation={2}
-                sx={{
-                  p: 3,
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  textAlign: 'center'
-                }}
+                sx={aboutStyles.teamCard}
               >
                 <Avatar
                   src={member.image}
@@ -166,12 +130,12 @@ const About = () => {
 
         {/* Contact Info Section */}
         <Paper elevation={3} sx={{ p: 4 }}>
-          <Typography variant="h4" component="h2" gutterBottom sx={{ color: '#2e7d32', textAlign: 'center', mb: 4 }}>
+          <Typography variant="h4" component="h2" gutterBottom sx={aboutStyles.sectionTitle}>
             פרטי התקשרות
           </Typography>
           <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Box sx={aboutStyles.contactItem}>
                 <LocationOnIcon sx={{ color: '#2e7d32', mr: 1 }} />
                 <Typography>
                   רחוב הפרחים 123, תל אביב
@@ -187,7 +151,7 @@ const About = () => {
               </Box>
             </Grid>
             <Grid item xs={12} md={4}>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+              <Box sx={aboutStyles.contactItem}>
                 <EmojiNatureIcon sx={{ color: '#2e7d32', mr: 1 }} />
                 <Typography>
                   טל': 03-1234567

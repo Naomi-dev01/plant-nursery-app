@@ -12,9 +12,9 @@ const cartSlice = createSlice({
     addToCart: (state, action) => {
       const existingItem = state.items.find(item => item.id === action.payload.id);
       if (existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += action.payload.quantity || 1;
       } else {
-        state.items.push({ ...action.payload, quantity: 1 });
+        state.items.push({ ...action.payload, quantity: action.payload.quantity || 1 });
       }
     },
     removeFromCart: (state, action) => {
@@ -39,6 +39,15 @@ export const { addToCart, removeFromCart, clearCart, updateQuantity } = cartSlic
 export const selectCartItems = createSelector(
   state => state.cart.items,
   items => items
+);
+
+// selector חדש שמחזיר את הכמות של מוצר ספציפי
+export const selectProductQuantity = (productId) => createSelector(
+  state => state.cart.items,
+  items => {
+    const item = items.find(item => item.id === productId);
+    return item ? item.quantity : 1;
+  }
 );
 
 export default cartSlice.reducer;

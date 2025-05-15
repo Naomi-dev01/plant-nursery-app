@@ -6,10 +6,13 @@ import ForestIcon from '@mui/icons-material/Forest';
 import SpaIcon from '@mui/icons-material/Spa';
 import EmojiNatureIcon from '@mui/icons-material/EmojiNature';
 import LandscapeIcon from '@mui/icons-material/Landscape';
+import { homeStyle } from '../../styles/homeStyle'; // Importing styles from homeStyle.js
+
 
 const Home = () => {
   const navigate = useNavigate();
 
+  //holds the categories in the plant nursery 
   const categories = [
     {
       title: 'פרחים',
@@ -51,50 +54,22 @@ const Home = () => {
 
   return (
     <Box>
-      {/* Hero Section */}
-      <Box
-        sx={{
-          backgroundImage: 'url(/images/navBarIm/300.jpg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          height: '60vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          '&::before': {
-            content: '""',
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          }
-        }}
-      >
+      {/* title Section */}
+     <Box sx={homeStyle.heroSectionStyle}>
         <Container maxWidth="md">
-          <Paper
-            elevation={3}
-            sx={{
-              p: 4,
-              textAlign: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.9)',
-              borderRadius: 2
-            }}
-          >
+          <Paper elevation={3} sx={homeStyle.paperStyle}>
             <Typography variant="h2" component="h1" gutterBottom sx={{ color: '#2e7d32' }}>
               משתלת נועה
             </Typography>
-            <Typography variant="h5" gutterBottom sx={{ color: '#1b5e20' }}>
+            <Typography variant="h5" gutterBottom sx={homeStyle.heroSubtitle}>
               המקום שלכם לכל צמח ופרח
             </Typography>
             <Button
               variant="contained"
               color="success"
               size="large"
-              onClick={() => navigate('/products')}
-              sx={{ mt: 2 }}
+              onClick={() => navigate('/products')}//navigates to products
+              sx={homeStyle.heroButton}
             >
               צפה במוצרים שלנו
             </Button>
@@ -111,16 +86,7 @@ const Home = () => {
           {categories.map((category) => (
             <Grid item xs={12} sm={6} md={3} key={category.title}>
               <Card
-                sx={{
-                  height: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'transform 0.2s',
-                  '&:hover': {
-                    transform: 'scale(1.05)',
-                    cursor: 'pointer'
-                  }
-                }}
+                sx={homeStyle.cardStyle}
                 onClick={() => navigate(category.path)}
               >
                 <CardMedia
@@ -129,8 +95,8 @@ const Home = () => {
                   image={category.image}
                   alt={category.title}
                 />
-                <CardContent sx={{ flexGrow: 1, textAlign: 'center' }}>
-                  <Box sx={{ color: '#2e7d32', mb: 1 }}>
+                <CardContent sx={homeStyle.cardContent}>
+                  <Box sx={homeStyle.iconStyle}>
                     {category.icon}
                   </Box>
                   <Typography gutterBottom variant="h5" component="h3">
@@ -147,12 +113,12 @@ const Home = () => {
       </Container>
 
       {/* About Section */}
-      <Box sx={{ bgcolor: '#f5f5f5', py: 8 }}>
+      <Box sx={homeStyle.aboutSection}>
         <Container maxWidth="md">
-          <Typography variant="h3" component="h2" gutterBottom sx={{ textAlign: 'center', mb: 4, color: '#2e7d32' }}>
+          <Typography variant="h3" component="h2" gutterBottom sx={homeStyle.aboutTitle}>
             אודות המשתלה
           </Typography>
-          <Typography variant="body1" paragraph sx={{ textAlign: 'center', fontSize: '1.1rem' }}>
+          <Typography variant="body1" paragraph sx={homeStyle.aboutText}>
             משתלת נועה היא משתלה משפחתית ותיקה המספקת שירות מקצועי ואיכותי ללקוחותיה.
             אנו מתמחים בגידול והפצת צמחים ופרחים, ומציעים מגוון רחב של מוצרים איכותיים.
             הצוות המקצועי שלנו ישמח לעזור לכם בבחירת הצמחים המתאימים ביותר לגינה שלכם.

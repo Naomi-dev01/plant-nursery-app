@@ -21,6 +21,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { otherPagesStyles } from '../../styles/otherPages';
 
 // סכמת ולידציה עם Zod
 const contactFormSchema = z.object({
@@ -31,7 +32,7 @@ const contactFormSchema = z.object({
 });
 
 const ContactUs = () => {
-  const theme = useTheme();
+ 
   
   const [showSuccess, setShowSuccess] = useState(false);
   
@@ -61,15 +62,7 @@ const ContactUs = () => {
         <Grid item xs={12} md={4}>
           <Paper 
             elevation={0} 
-            sx={{ 
-              p: 4, 
-              height: '100%',
-              borderRadius: 2,
-              bgcolor: 'grey.50',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 3
-            }}
+            sx={otherPagesStyles.contactInfoPaper}
           >
             <Typography variant="h4" gutterBottom color="primary">
               צור קשר
@@ -88,7 +81,7 @@ const ContactUs = () => {
               </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={otherPagesStyles.contactIconBox}>
               <PhoneIcon color="primary" />
               <Box>
                 <Typography variant="subtitle1" fontWeight="bold">טלפון</Typography>
@@ -98,7 +91,7 @@ const ContactUs = () => {
               </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={otherPagesStyles.contactIconBox}>
               <EmailIcon color="primary" />
               <Box>
                 <Typography variant="subtitle1" fontWeight="bold">אימייל</Typography>
@@ -108,7 +101,7 @@ const ContactUs = () => {
               </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <Box sx={otherPagesStyles.contactIconBox}>
               <AccessTimeIcon color="primary" />
               <Box>
                 <Typography variant="subtitle1" fontWeight="bold">שעות פעילות</Typography>
@@ -125,12 +118,7 @@ const ContactUs = () => {
         <Grid item xs={12} md={8}>
           <Paper 
             elevation={0} 
-            sx={{ 
-              p: 4,
-              borderRadius: 2,
-              bgcolor: 'white',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
-            }}
+            sx={otherPagesStyles.contactFormPaper}
           >
             <Typography variant="h5" gutterBottom color="primary">
               שלח לנו הודעה
@@ -149,14 +137,7 @@ const ContactUs = () => {
                     {...register('name')}
                     error={!!errors.name}
                     helperText={errors.name?.message}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '&:hover fieldset': {
-                          borderColor: 'primary.main',
-                        },
-                      },
-                    }}
+                    sx={otherPagesStyles.contactFormTextField}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -167,14 +148,7 @@ const ContactUs = () => {
                     {...register('email')}
                     error={!!errors.email}
                     helperText={errors.email?.message}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '&:hover fieldset': {
-                          borderColor: 'primary.main',
-                        },
-                      },
-                    }}
+                    sx={otherPagesStyles.contactFormTextField}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -184,14 +158,7 @@ const ContactUs = () => {
                     {...register('phone')}
                     error={!!errors.phone}
                     helperText={errors.phone?.message}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '&:hover fieldset': {
-                          borderColor: 'primary.main',
-                        },
-                      },
-                    }}
+                    sx={otherPagesStyles.contactFormTextField}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -203,14 +170,7 @@ const ContactUs = () => {
                     {...register('message')}
                     error={!!errors.message}
                     helperText={errors.message?.message}
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 2,
-                        '&:hover fieldset': {
-                          borderColor: 'primary.main',
-                        },
-                      },
-                    }}
+                    sx={otherPagesStyles.contactFormTextField}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -219,18 +179,7 @@ const ContactUs = () => {
                     variant="contained"
                     color="primary"
                     size="large"
-                    sx={{
-                      borderRadius: 2,
-                      py: 1.5,
-                      px: 4,
-                      textTransform: 'none',
-                      fontSize: '1.1rem',
-                      boxShadow: '0 4px 12px rgba(46, 125, 50, 0.2)',
-                      '&:hover': {
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 6px 16px rgba(46, 125, 50, 0.3)'
-                      }
-                    }}
+                    sx={otherPagesStyles.contactFormButton}
                   >
                     שלח
                   </Button>
@@ -245,16 +194,12 @@ const ContactUs = () => {
         open={showSuccess} 
         autoHideDuration={6000} 
         onClose={handleCloseSnackbar}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={otherPagesStyles.snackbarPosition}
       >
         <Alert 
           onClose={handleCloseSnackbar} 
           severity="success" 
-          sx={{ 
-            width: '100%',
-            borderRadius: 2,
-            boxShadow: '0 4px 12px rgba(46, 125, 50, 0.2)'
-          }}
+          sx={otherPagesStyles.contactFormAlert}
         >
           ההודעה נשלחה בהצלחה! נחזור אליך בהקדם.
         </Alert>

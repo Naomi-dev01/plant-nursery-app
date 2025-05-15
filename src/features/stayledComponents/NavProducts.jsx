@@ -117,7 +117,8 @@ export default function ButtonBaseDemo() {
         <ImageButton
           focusRipple
           key={image.title}
-          onClick={() => navigate(`/products/${image.category}`)}
+
+          onClick={() => navigate(`/products/${image.category}`)}//ניווט לדף רשימת מוצרים עפ הקטגוריה שנבחרה
           style={{
             width: image.width,
           }}

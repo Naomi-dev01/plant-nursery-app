@@ -1,23 +1,26 @@
 import React, { useEffect } from 'react'
 import { getAllData } from '../../api/apiCalls'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import ProductsList from './ProductsList'
 import { useDispatch, useSelector } from 'react-redux';
 import { setIsLoading , setProducts } from '../../redux/Slice/productSlice'
 import NavProducts from '../stayledComponents/NavProducts'
+import { Container, Typography, Box, Button, CircularProgress } from '@mui/material';
+import { productsStyles } from '../../styles/productsStyle';
 
 
 
 
 //הקומפוננטה מסננת את המוצרים שנבחרו לפי הקטגוריה הניווט. 
-// המוצרים המסוננים נשלחים לקומפוננטת LIST שמציגה את כל הצורים בצורה מעוצבת.
+// המוצרים המסוננים נשלחים לקומפוננטת LIST שמציגה את כל המוצרים בצורה מעוצבת.
 const CategoryProducts = () => {
 
   const dispatch = useDispatch()
+ 
 
   
-  const loading = useSelector((state) => state.product.isLoading)
+  const loading = useSelector((state) => state.product.isLoading)//מצב טעינה
   const data = useSelector((state) => state.product.products)
 
   
@@ -29,13 +32,13 @@ const CategoryProducts = () => {
       dispatch(setIsLoading(true));
       const allProducts = await getAllData();
       
-      console.log("All Products:", allProducts);
-      console.log("Category:", category);
+      console.log("1. All Products from CategoryProducts:", allProducts);
+      console.log("2. Category:", category);
 
       // קבלת הנתונים מהקטגוריה המבוקשת
       const filteredProducts = allProducts[category];
 
-      console.log("Filtered Products:", filteredProducts);
+      console.log("3. Filtered Products fron CategoryProducts:", filteredProducts);
 
       // אם הקטגוריה היא gardenDesign, מציגים את כל המוצרים ללא תלות במלאי
       const availableProducts = category === 'gardenDesign' 
@@ -54,7 +57,7 @@ const CategoryProducts = () => {
       }
       
     } catch (error) {
-      console.error("Failed to fetch products:", error.message);
+      console.error("Failed to fetch products (CategoryProducts):", error.message);
       dispatch(setProducts([]));
     } finally {
       dispatch(setIsLoading(false));
@@ -66,9 +69,14 @@ const CategoryProducts = () => {
     fetchingProducts()
   }, [category])
 
+  
+
+ 
+
   return (
     <div>
-      <NavProducts />
+      {/*all data is sent to Productist to show on screen all products.  */}
+    
       <ProductsList loading={loading} data={data}/>
     </div>
   )

@@ -34,14 +34,14 @@ const NavBar = () => {
             fontWeight: 'bold',
             cursor: 'pointer'
           }}
-          onClick={() => navigate('/')}
+          onClick={() => navigate('/')}//navigates to hompage
         >
-          גן עדן
+          משתלת נועה
         </Typography>
         <Box sx={{ display: 'flex', gap: 2 }}>
           <Button 
             color="primary" 
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/')}//navigates to hompage
             sx={{ 
               '&:hover': { 
                 backgroundColor: 'rgba(46, 125, 50, 0.1)' 
@@ -52,7 +52,7 @@ const NavBar = () => {
           </Button>
           <Button 
             color="primary" 
-            onClick={() => navigate('/products')}
+            onClick={() => navigate('/products')}//navigates to products
             sx={{ 
               '&:hover': { 
                 backgroundColor: 'rgba(46, 125, 50, 0.1)' 
@@ -63,7 +63,7 @@ const NavBar = () => {
           </Button>
           <Button 
             color="primary" 
-            onClick={() => navigate('/about')}
+            onClick={() => navigate('/about')}// nav to about
             sx={{ 
               '&:hover': { 
                 backgroundColor: 'rgba(46, 125, 50, 0.1)' 
@@ -74,7 +74,7 @@ const NavBar = () => {
           </Button>
           <Button 
             color="primary" 
-            onClick={() => navigate('/contactUs')}
+            onClick={() => navigate('/contactUs')}//nav to contact Us
             sx={{ 
               '&:hover': { 
                 backgroundColor: 'rgba(46, 125, 50, 0.1)' 
@@ -85,13 +85,14 @@ const NavBar = () => {
           </Button>
           <IconButton 
             color="primary" 
-            onClick={() => navigate('/cart')}
+            onClick={() => navigate('/cart')}//nav to cart
             sx={{ 
               '&:hover': { 
                 backgroundColor: 'rgba(46, 125, 50, 0.1)' 
               } 
             }}
           >
+            {/*cart icon including dinamic amount of products*/}
             <Badge badgeContent={itemCount} color="primary">
               <ShoppingCartIcon />
             </Badge>

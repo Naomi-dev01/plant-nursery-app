@@ -6,19 +6,24 @@ import {
   TextField,
   Grid,
    IconButton,
-  Alert,
-  Snackbar,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions
-} from '@mui/material';
+ } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { removeFromCart, clearCart, updateQuantity } from '../../redux/Slice/cartSlice';
 import { useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  cartContainerStyles,
+  paperStyles,
+  itemBoxStyles,
+  imageStyles,
+  successContainerStyles,
+  successPaperStyles,
+  successButtonStyles,
+  emptyCartContainerStyles,
+  emptyCartPaperStyles
+} from '../../styles/cartStyles';
 
 // סכמת ולידציה עם Zod
 //קביעת הסכמה, מה השדות השגיאות והמגבלות
@@ -40,8 +45,7 @@ const Cart = () => {
   //holds the selected products by going to cartSlice that holds the items.
   const cartItems = useSelector((state) => state.cart.items);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [shouldNavigate, setShouldNavigate] = useState(false);
-  const [showContinueButton, setShowContinueButton] = useState(false);
+   const [showContinueButton, setShowContinueButton] = useState(false);
   
   //מטפל בשדות הטופס ולדווא בדיקת תקינות של הלקטים
   //מכיל אוביקטים לכל אוביקט תפקיד לשימוש בטופס.
@@ -58,13 +62,15 @@ const Cart = () => {
 
   /**
    * מטפלת בשליחת הטופס:
-   * 1. מדפיסה את פרטי ההזמנה ללוג
-   * 2. מנקה את העגלה
-   * 3. מאפסת את הטופס
-   * 4. מציגה הודעת הצלחה
-   * 5. מציגה כפתור חזרה לקניות
+   * 1. מונעת את התנהגות ברירת המחדל של הטופס
+   * 2. מדפיסה את פרטי ההזמנה ללוג
+   * 3. מנקה את העגלה
+   * 4. מאפסת את הטופס
+   * 5. מציגה הודעת הצלחה
+   * 6. מציגה כפתור חזרה לקניות
    */
-  const onSubmit = (data) => {
+  const onSubmit = (data, event) => {
+    event.preventDefault(); // מונע את התנהגות ברירת המחדל של הטופס
     console.log('Order submitted:', { items: cartItems, customerDetails: data });
     dispatch(clearCart());
     reset();
@@ -72,18 +78,6 @@ const Cart = () => {
     setShowContinueButton(true);
   };
 
-  /**
-   * מטפלת בסגירת ההודעה:
-   * 1. בודקת אם הסיבה לסגירה היא לחיצה מחוץ להודעה
-   * 2. אם כן, לא עושה כלום
-   * 3. אם לא, מסתירה את ההודעה
-   */
-  const handleCloseSnackbar = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setShowSuccess(false);
-  };
 
   /**
    * מחשבת את הסכום הכולל של ההזמנה:
@@ -115,8 +109,8 @@ const Cart = () => {
 
   if (showSuccess) {
     return (
-      <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
-        <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
+      <Container sx={successContainerStyles}>
+        <Paper sx={successPaperStyles}>
           <Typography variant="h5" gutterBottom sx={{ color: '#4caf50', fontWeight: 'bold' }}>
             ההזמנה נקלטה בהצלחה!
           </Typography>
@@ -126,21 +120,11 @@ const Cart = () => {
           <Button 
             variant="contained" 
             color="primary" 
-            onClick={() => navigate('/products')}
-            sx={{ 
-              mt: 2,
-              py: 1.5,
-              px: 4,
-              fontSize: '1.1rem',
-              boxShadow: '0 4px 12px rgba(46, 125, 50, 0.2)',
-              '&:hover': {
-                transform: 'translateY(-2px)',
-                boxShadow: '0 6px 16px rgba(46, 125, 50, 0.3)'
-              }
-            }}
+            onClick={() => navigate('/')}
+            sx={successButtonStyles}
           >
-            חזרה לקניות
-          </Button>
+            לדף הבית
+                      </Button>
         </Paper>
       </Container>
     );
@@ -148,8 +132,8 @@ const Cart = () => {
 
   if (Object.keys(cartItems).length === 0) {
     return (
-      <Container maxWidth="md" sx={{ mt: 8, mb: 8 }}>
-        <Paper elevation={3} sx={{ p: 4, textAlign: 'center' }}>
+      <Container sx={emptyCartContainerStyles}>
+        <Paper sx={emptyCartPaperStyles}>
           <Typography variant="h5" gutterBottom>
             העגלה ריקה
           </Typography>
@@ -167,32 +151,21 @@ const Cart = () => {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 8, mb: 8 }}>
+    <Container sx={cartContainerStyles}>
       <Grid container spacing={4}>
         {/* פרטי הזמנה */}
         <Grid item xs={12} md={8}>
-          <Paper elevation={3} sx={{ p: 3 }}>
+          <Paper sx={paperStyles}>
             <Typography variant="h5" gutterBottom>
               פרטי הזמנה
             </Typography>
             {Object.values(cartItems).map((item) => (
-              <Box key={item.id} sx={{ mb: 2, display: 'flex', alignItems: 'center' }}>
+              <Box key={item.id} sx={itemBoxStyles}>
                 <Box
                   component="img"
                   src={item.image}
                   alt={item.name}
-                  sx={{ 
-                    width: 80, 
-                    height: 80, 
-                    objectFit: 'cover', 
-                    mr: 2, 
-                    cursor: 'pointer',
-                    transition: 'transform 0.2s ease-in-out',
-                    '&:hover': {
-                      transform: 'scale(1.1)',
-                      cursor: 'pointer'
-                    }
-                  }}
+                  sx={imageStyles}
                   onClick={() => navigate(`/products/details/${item.id}`)}
                 />
                 <Box sx={{ flexGrow: 1 }}>
@@ -236,7 +209,7 @@ const Cart = () => {
 
         {/* טופס תשלום */}
         <Grid item xs={12} md={4}>
-          <Paper elevation={3} sx={{ p: 3 }}>
+          <Paper sx={paperStyles}>
             <Typography variant="h5" gutterBottom>
               פרטי תשלום
             </Typography>
@@ -349,4 +322,4 @@ const Cart = () => {
   );
 };
 
-export default Cart; 
+export default Cart;

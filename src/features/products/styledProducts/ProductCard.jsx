@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Card, 
   CardMedia, 
@@ -12,74 +12,106 @@ import {
   Snackbar, 
   Alert,
   Grid,
-  Container,
-  useTheme,
-  useMediaQuery
+  Container
 } from "@mui/material";
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../../redux/Slice/cartSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { addToCart, selectProductQuantity } from '../../../redux/Slice/cartSlice';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CartButton from '../../stayledComponents/CartButton';
+import { useNavigate } from 'react-router-dom';
+import { productsStyles } from '../../../styles/productsStyle';
 
-const ProductCard = ({ product, onBack }) => {
+/**
+ * קומפוננטת ProductCard - מציגה את פרטי המוצר ומאפשרת הוספה לעגלה
+ * @param {Object} product - אובייקט המוצר להצגה
+ * @param {Function} onBack - פונקציה לחזרה לדף הקודם
+ */
+const ProductCard = ({ product }) => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [quantity, setQuantity] = useState(1);
+  const cartQuantity = useSelector(selectProductQuantity(product.id));
+  const [quantity, setQuantity] = useState(cartQuantity);
   const [showSuccess, setShowSuccess] = useState(false);
 
+  /**
+   * useEffect - מעדכן את הכמות המקומית כשהכמות בעגלה משתנה
+   * @param {number} cartQuantity - הכמות הנוכחית של המוצר בעגלה
+   */
+  useEffect(() => {
+    setQuantity(cartQuantity);
+  }, [cartQuantity]);
+
+  /**
+   * מטפלת בשינוי הכמות של המוצר
+   * @param {number} change - השינוי בכמות (1 או -1)
+   */
   const handleQuantityChange = (change) => {
-    setQuantity(prev => Math.max(1, prev + change));
+    const newQuantity = Math.max(1, quantity + change);
+    setQuantity(newQuantity);
   };
 
+  /**
+   * מטפלת בהוספת המוצר לעגלה
+   * 1. שולחת את המוצר והכמות ל-Redux store
+   * 2. מציגה הודעת הצלחה
+   */
   const handleAddToCart = () => {
     dispatch(addToCart({ ...product, quantity }));
     setShowSuccess(true);
   };
 
+  /**
+   * מטפלת בסגירת הודעת ההצלחה
+   */
   const handleCloseSnackbar = () => {
     setShowSuccess(false);
   };
 
+  /**
+   * מציגה את פרטי המוצר בהתאם לקטגוריה שלו
+   * @returns {JSX.Element} - רכיב JSX עם פרטי המוצר
+   */
   const renderProductDetails = () => {
     switch (product.categoryName) {
       case "flowers":
         return (
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'right' }}>
+              <Typography variant="h4" gutterBottom sx={productsStyles.productTitle}>
                 {product.name}
               </Typography>
-              <Typography variant="h5" color="primary" sx={{ fontWeight: 'bold', textAlign: 'right', mb: 3 }}>
+              <Typography variant="h5" color="primary" sx={productsStyles.productPrice}>
                 ₪{product.cost}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>קטגוריה:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>קטגוריה:</Typography>
               <Typography variant="body1">{product.category}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>צבעים:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>צבעים:</Typography>
               <Typography variant="body1">{product.colors}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>גובה:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>גובה:</Typography>
               <Typography variant="body1">{product.height}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>תנאי גידול:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>תנאי גידול:</Typography>
               <Typography variant="body1">{product.growingConditions}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>טיפול:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>טיפול:</Typography>
               <Typography variant="body1">{product.care}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>שימושים עיקריים:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>שימושים עיקריים:</Typography>
               <Typography variant="body1">{product.mainUses}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>תכונות מיוחדות:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>תכונות מיוחדות:</Typography>
               <Typography variant="body1">{product.specialFeatures}</Typography>
             </Grid>
           </Grid>
@@ -88,31 +120,31 @@ const ProductCard = ({ product, onBack }) => {
         return (
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'right' }}>
+              <Typography variant="h4" gutterBottom sx={productsStyles.productTitle}>
                 {product.name}
               </Typography>
-              <Typography variant="h5" color="primary" sx={{ fontWeight: 'bold', textAlign: 'right', mb: 3 }}>
+              <Typography variant="h5" color="primary" sx={productsStyles.productPrice}>
                 ₪{product.cost}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>קטגוריה:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>קטגוריה:</Typography>
               <Typography variant="body1">{product.category}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>גובה:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>גובה:</Typography>
               <Typography variant="body1">{product.height}</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>תנאי גידול:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>תנאי גידול:</Typography>
               <Typography variant="body1">{product.growingConditions}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>טיפול:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>טיפול:</Typography>
               <Typography variant="body1">{product.care}</Typography>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="body1" sx={{ fontWeight: 'bold' }}>שימוש עיקרי:</Typography>
+              <Typography variant="body1" sx={productsStyles.productLabel}>שימוש עיקרי:</Typography>
               <Typography variant="body1">{product.mainUse}</Typography>
             </Grid>
           </Grid>
@@ -121,14 +153,14 @@ const ProductCard = ({ product, onBack }) => {
         return (
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', textAlign: 'right' }}>
+              <Typography variant="h4" gutterBottom sx={productsStyles.productTitle}>
                 {product.name}
               </Typography>
-              <Typography variant="h5" color="primary" sx={{ fontWeight: 'bold', textAlign: 'right', mb: 3 }}>
+              <Typography variant="h5" color="primary" sx={productsStyles.productPrice}>
                 ₪{product.cost}
               </Typography>
             </Grid>
-                     </Grid>
+          </Grid>
         );
     }
   };
@@ -136,127 +168,44 @@ const ProductCard = ({ product, onBack }) => {
   return (
     <>
       <CartButton />
-      <Box sx={{ 
-        width: '100%', 
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: '80vh',
-        py: 6,
-        px: 2,
-        bgcolor: 'grey.50'
-      }}>
-        <Paper 
-          elevation={0} 
-          sx={{ 
-            p: { xs: 3, md: 6 }, 
-            borderRadius: 4,
-            width: '100%',
-            maxWidth: '1200px',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 4,
-            bgcolor: 'white',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
-          }}
-        >
+      <Box sx={productsStyles.productCardContainer}>
+        <Paper elevation={0} sx={productsStyles.productCardPaper}>
           <Grid container spacing={6}>
             {/* תמונת המוצר - צד ימין */}
             <Grid item xs={12} md={6}>
-              <Box
-                sx={{
-                  width: '100%',
-                  height: { xs: '350px', md: '500px' },
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 3,
-                  overflow: 'hidden',
-                  bgcolor: 'white',
-                  boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                  position: 'relative',
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    borderRadius: 3,
-                    boxShadow: 'inset 0 0 0 1px rgba(0,0,0,0.05)'
-                  }
-                }}
-              >
+              <Box sx={productsStyles.productImageBox}>
                 <CardMedia
                   component="img"
                   image={product.image}
                   alt={product.name}
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'contain',
-                    p: 2
-                  }}
+                  sx={productsStyles.productImage}
                 />
               </Box>
             </Grid>
 
             {/* פרטי המוצר - צד שמאל */}
             <Grid item xs={12} md={6}>
-              <Box sx={{ 
-                height: '100%', 
-                display: 'flex', 
-                flexDirection: 'column',
-                gap: 4
-              }}>
+              <Box sx={productsStyles.productDetailsBox}>
                 {renderProductDetails()}
                 
                 {/* כפתורי שליטה בכמות */}
-                <Box sx={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  justifyContent: 'flex-start',
-                  gap: 2,
-                  py: 2
-                }}>
+                <Box sx={productsStyles.quantityControlBox}>
                   <IconButton 
                     size="large" 
                     onClick={() => handleQuantityChange(-1)}
                     color="primary"
-                    sx={{ 
-                      backgroundColor: 'rgba(46, 125, 50, 0.1)',
-                      width: 48,
-                      height: 48,
-                      '&:hover': {
-                        backgroundColor: 'rgba(46, 125, 50, 0.2)'
-                      }
-                    }}
+                    sx={productsStyles.quantityButton}
                   >
                     <RemoveIcon />
                   </IconButton>
-                  <Typography 
-                    variant="h5" 
-                    sx={{ 
-                      minWidth: 60, 
-                      textAlign: 'center',
-                      fontWeight: 'bold',
-                      color: 'primary.main'
-                    }}
-                  >
+                  <Typography variant="h5" sx={productsStyles.quantityText}>
                     {quantity}
                   </Typography>
                   <IconButton 
                     size="large" 
                     onClick={() => handleQuantityChange(1)}
                     color="primary"
-                    sx={{ 
-                      backgroundColor: 'rgba(46, 125, 50, 0.1)',
-                      width: 48,
-                      height: 48,
-                      '&:hover': {
-                        backgroundColor: 'rgba(46, 125, 50, 0.2)'
-                      }
-                    }}
+                    sx={productsStyles.quantityButton}
                   >
                     <AddIcon />
                   </IconButton>
@@ -269,20 +218,7 @@ const ProductCard = ({ product, onBack }) => {
                   size="large"
                   startIcon={<ShoppingCartIcon />}
                   onClick={handleAddToCart}
-                  sx={{
-                    py: 2,
-                    px: 6,
-                    borderRadius: 3,
-                    textTransform: 'none',
-                    fontSize: '1.2rem',
-                    fontWeight: 'bold',
-                    boxShadow: '0 4px 12px rgba(46, 125, 50, 0.2)',
-                    alignSelf: 'flex-start',
-                    '&:hover': {
-                      transform: 'translateY(-2px)',
-                      boxShadow: '0 6px 16px rgba(46, 125, 50, 0.3)'
-                    }
-                  }}
+                  sx={productsStyles.addToCartButton}
                 >
                   הוסף לעגלה
                 </Button>
@@ -291,7 +227,9 @@ const ProductCard = ({ product, onBack }) => {
           </Grid>
         </Paper>
       </Box>
-
+      <Button variant="outlined" onClick={() => navigate(-1)} sx={productsStyles.backButton}>
+        חזור אחורה
+      </Button>
       <Snackbar 
         open={showSuccess} 
         autoHideDuration={3000} 
@@ -301,11 +239,7 @@ const ProductCard = ({ product, onBack }) => {
         <Alert 
           onClose={handleCloseSnackbar} 
           severity="success" 
-          sx={{ 
-            width: '100%',
-            borderRadius: 2,
-            boxShadow: '0 4px 12px rgba(46, 125, 50, 0.2)'
-          }}
+          sx={productsStyles.successAlert}
         >
           המוצר נוסף לעגלה בהצלחה!
         </Alert>
